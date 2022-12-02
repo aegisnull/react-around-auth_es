@@ -9,6 +9,8 @@ import ImagePopup from "./ImagePopup";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { CardsContext } from "../contexts/CardsContext";
+import { Route, Routes } from "react-router-dom";
+import Login from "./Login";
 
 function App() {
   const [cards, setCards] = React.useState([]);
@@ -163,14 +165,22 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <Header />
         <CardsContext.Provider value={cards}>
-          <Main
-            onEditProfileClick={handleEditProfileClick}
-            onAddPlaceClick={handleAddPlaceClick}
-            onEditAvatarClick={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-          />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Main
+                  onEditProfileClick={handleEditProfileClick}
+                  onAddPlaceClick={handleAddPlaceClick}
+                  onEditAvatarClick={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                />
+              }
+            ></Route>
+            <Route path="/sign-in" element={<Login />}></Route>
+          </Routes>
         </CardsContext.Provider>
         <Footer />
         <ImagePopup
