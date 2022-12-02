@@ -179,7 +179,7 @@ function App() {
                 />
               }
             ></Route>
-            <Route path="/sign-in" element={<Login />}></Route>
+            <Route path="/signin" element={<Login />}></Route>
           </Routes>
         </CardsContext.Provider>
         <Footer />
