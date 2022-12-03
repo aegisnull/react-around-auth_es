@@ -11,6 +11,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { CardsContext } from "../contexts/CardsContext";
 import { Route, Routes } from "react-router-dom";
 import Login from "./Login";
+import Register from "./Register";
 
 function App() {
   const [cards, setCards] = React.useState([]);
@@ -180,6 +181,7 @@ function App() {
               }
             ></Route>
             <Route path="/signin" element={<Login />}></Route>
+            <Route path="/signup" element={<Register />}></Route>
           </Routes>
         </CardsContext.Provider>
         <Footer />
