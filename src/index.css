@@ -12,7 +12,7 @@
 @import url(./blocks/popup/popup.css);
 @import url(./blocks/page/page.css);
 
-@import url(./blocks/login/login.css);
+@import url(./blocks/auth/auth.css);
 
 html {
   background-color: black;

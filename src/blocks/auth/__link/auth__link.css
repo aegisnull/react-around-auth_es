@@ -1,4 +1,4 @@
-.login__link {
+.auth__link {
   font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 14px;
@@ -7,6 +7,6 @@
   text-decoration: none;
 }
 
-.login__link:hover {
+.auth__link:hover {
   opacity: 0.8;
 }
