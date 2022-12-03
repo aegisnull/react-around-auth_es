@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import InfoTooltip from "./InfoTooltip";
 
 function Login() {
   return (
@@ -21,6 +22,7 @@ function Login() {
           Not a member yet? Sign up here!
         </Link>
       </form>
+      <InfoTooltip />;
     </div>
   );
 }
