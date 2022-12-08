@@ -170,7 +170,7 @@ function App() {
   return (
     <div className="page__content">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header />
+        <Header isLoggedIn={isLoggedIn} />
         <CardsContext.Provider value={cards}>
           <Routes>
             <Route
