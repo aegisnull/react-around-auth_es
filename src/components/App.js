@@ -16,11 +16,16 @@ import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const [cards, setCards] = React.useState([]);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
 
-  function changeOnLogin() {
+  //function changeOnLogin() {
+  //  setIsLoggedIn(true);
+  // }
+
+  React.useEffect(() => {
+    //set isLoggedIn to true on page load
     setIsLoggedIn(true);
-  }
+  }, []);
 
   React.useEffect(() => {
     api
@@ -176,14 +181,16 @@ function App() {
             <Route
               path="/"
               element={
-                <Main
-                  onEditProfileClick={handleEditProfileClick}
-                  onAddPlaceClick={handleAddPlaceClick}
-                  onEditAvatarClick={handleEditAvatarClick}
-                  onCardClick={handleCardClick}
-                  onCardLike={handleCardLike}
-                  onCardDelete={handleCardDelete}
-                />
+                <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <Main
+                    onEditProfileClick={handleEditProfileClick}
+                    onAddPlaceClick={handleAddPlaceClick}
+                    onEditAvatarClick={handleEditAvatarClick}
+                    onCardClick={handleCardClick}
+                    onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete}
+                  />
+                </ProtectedRoute>
               }
             ></Route>
             <Route path="/signin" element={<Login />}></Route>
