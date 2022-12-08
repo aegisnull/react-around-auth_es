@@ -15,6 +15,11 @@ import Register from "./Register";
 
 function App() {
   const [cards, setCards] = React.useState([]);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  function changeOnLogin() {
+    setIsLoggedIn(true);
+  }
 
   React.useEffect(() => {
     api
