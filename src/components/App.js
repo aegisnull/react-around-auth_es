@@ -12,6 +12,7 @@ import { CardsContext } from "../contexts/CardsContext";
 import { Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const [cards, setCards] = React.useState([]);
