@@ -10,7 +10,7 @@ import api from "../utils/api";
 import { auth } from "../utils/auth";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { CardsContext } from "../contexts/CardsContext";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
@@ -18,7 +18,7 @@ import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [cards, setCards] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -26,6 +26,10 @@ function App() {
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const history = useNavigate();
 
   useEffect(() => {
     api
@@ -71,6 +75,24 @@ function App() {
     document.addEventListener("click", closeByClick);
 
     return () => document.removeEventListener("click", closeByClick);
+  }, []);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    if (jwt) {
+      auth
+        .validateToken(jwt)
+        .then((res) => {
+          if (res) {
+            setUserEmail(res.data.email);
+            setIsLoggedIn(true);
+            history("/");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   function handleCardLike(card) {
@@ -163,10 +185,55 @@ function App() {
       });
   }
 
+  function handleLogout() {
+    localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
+    history("/login");
+  }
+
+  function handleLogin(userData) {
+    auth
+      .authenticate(userData)
+      .then((user) => {
+        localStorage.setItem("jwt", user.token);
+        setIsLoggedIn(true);
+        setUserEmail(userData.email);
+        history("/");
+      })
+      .catch((err) => {
+        setIsSuccess(false);
+        setIsInfoTooltipOpen(true);
+        console.log(err);
+      });
+  }
+
+  function handleSignup(userData) {
+    auth
+      .register(userData)
+      .then((user) => {
+        if (user.data._id) {
+          setIsSuccess(true);
+          history("signin");
+        } else {
+          setIsSuccess(false);
+        }
+      })
+      .catch(() => {
+        setIsSuccess(false);
+      })
+      .finally(() => {
+        setIsInfoTooltipOpen(true);
+      });
+  }
+
   return (
     <div className="page__content">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header isLoggedIn={isLoggedIn} />
+        <Header
+          isLoggedIn={isLoggedIn}
+          userEmail={userEmail}
+          handleLogout={handleLogout}
+        />
         <CardsContext.Provider value={cards}>
           <Routes>
             <Route
@@ -184,8 +251,16 @@ function App() {
                 </ProtectedRoute>
               }
             ></Route>
-            <Route path="/signin" element={<Login />}></Route>
-            <Route path="/signup" element={<Register />}></Route>
+            <Route
+              path="/signin"
+              element={<Login isLoggedIn={isLoggedIn} onSubmit={handleLogin} />}
+            ></Route>
+            <Route
+              path="/signup"
+              element={
+                <Register isSuccess={isSuccess} onSubmit={handleSignup} />
+              }
+            ></Route>
           </Routes>
         </CardsContext.Provider>
         <Footer />
@@ -209,7 +284,12 @@ function App() {
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
         />
-        <InfoTooltip isOpen={isInfoTooltipOpen} onClose={closeAllPopups} />;
+        <InfoTooltip
+          isOpen={isInfoTooltipOpen}
+          onClose={closeAllPopups}
+          isSuccess={isSuccess}
+        />
+        ;
       </CurrentUserContext.Provider>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Login() {
+function Login(props) {
   return (
     <div className="auth">
       <form className="auth__form">
