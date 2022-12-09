@@ -16,7 +16,11 @@ function Header(props) {
           {props.isLoggedIn ? (
             <>
               <p className="header__auth">{props.userEmail}</p>
-              <Link to="/signin" className="header__auth">
+              <Link
+                to="/signin"
+                className="header__auth"
+                onClick={props.handleLogout}
+              >
                 Log out
               </Link>
             </>
