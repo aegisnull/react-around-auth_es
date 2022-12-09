@@ -7,6 +7,7 @@ import EditAvatarPopup from "./EditAvatarPopup";
 import React from "react";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/api";
+import { auth } from "../utils/auth";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { CardsContext } from "../contexts/CardsContext";
 import { Route, Routes } from "react-router-dom";
