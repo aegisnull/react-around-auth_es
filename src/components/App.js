@@ -13,6 +13,7 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [cards, setCards] = React.useState([]);
@@ -109,6 +110,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsImagePopupOpen(false);
+    setIsInfoTooltipOpen(false);
     setSelectedCard({});
   }
 
@@ -172,6 +174,8 @@ function App() {
     return () => document.removeEventListener("click", closeByClick);
   }, []);
 
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
+
   return (
     <div className="page__content">
       <CurrentUserContext.Provider value={currentUser}>
@@ -218,6 +222,7 @@ function App() {
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
         />
+        <InfoTooltip isOpen={isInfoTooltipOpen} onClose={closeAllPopups} />;
       </CurrentUserContext.Provider>
     </div>
   );
