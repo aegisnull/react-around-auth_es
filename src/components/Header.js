@@ -1,7 +1,11 @@
 import logo from "../images/logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-function Header() {
+function Header(props) {
+  const currentPath = useLocation().pathname;
+  const linkTo = currentPath === "/signup" ? "/signin" : "/signup";
+  const linkText = currentPath === "/signin" ? "Sign up" : "Log in";
+
   return (
     <>
       <header className="main__container header">
@@ -9,9 +13,18 @@ function Header() {
           <img className="header__logo" src={logo} alt="Logo Around" />
         </Link>
         <nav className="header__nav">
-          <Link to="/signin" className="header__auth">
-            Log in
-          </Link>
+          {props.isLoggedIn ? (
+            <>
+              <p className="header__auth">{props.userEmail}</p>
+              <Link to="/signin" className="header__auth">
+                Log out
+              </Link>
+            </>
+          ) : (
+            <Link to={linkTo} className="header__auth">
+              {linkText}
+            </Link>
+          )}
         </nav>
       </header>
       <div className="header__line"></div>

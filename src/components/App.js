@@ -24,11 +24,6 @@ function App() {
   // }
 
   React.useEffect(() => {
-    //set isLoggedIn to true on page load
-    setIsLoggedIn(true);
-  }, []);
-
-  React.useEffect(() => {
     api
       .getInitialCards()
       .then((data) => {
