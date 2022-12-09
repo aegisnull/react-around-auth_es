@@ -19,10 +19,17 @@ import InfoTooltip from "./InfoTooltip";
 function App() {
   const [cards, setCards] = React.useState([]);
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
+    React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
+    React.useState(false);
 
-  //function changeOnLogin() {
-  //  setIsLoggedIn(true);
-  // }
+  const [selectedCard, setSelectedCard] = React.useState({});
+  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
 
   React.useEffect(() => {
     api
@@ -33,6 +40,41 @@ function App() {
       .catch((err) => {
         console.log("Error. La solicitud ha fallado");
       });
+  }, []);
+
+  React.useEffect(() => {
+    api
+      .getUserInfo()
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .catch((err) => {
+        console.log("Error. La solicitud ha fallado");
+      });
+  }, []);
+
+  React.useEffect(() => {
+    const closeByEscape = (e) => {
+      if (e.key === "Escape") {
+        closeAllPopups();
+      }
+    };
+
+    document.addEventListener("keydown", closeByEscape);
+
+    return () => document.removeEventListener("keydown", closeByEscape);
+  }, []);
+
+  React.useEffect(() => {
+    const closeByClick = (e) => {
+      if (e.target.classList.contains("modal_active")) {
+        closeAllPopups();
+      }
+    };
+
+    document.addEventListener("click", closeByClick);
+
+    return () => document.removeEventListener("click", closeByClick);
   }, []);
 
   function handleCardLike(card) {
@@ -62,27 +104,6 @@ function App() {
         console.log(err);
       });
   }
-
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
-
-  const [selectedCard, setSelectedCard] = React.useState({});
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-
-  const [currentUser, setCurrentUser] = React.useState({});
-  React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((err) => {
-        console.log("Error. La solicitud ha fallado");
-      });
-  }, []);
 
   function handleCardClick(cardData) {
     setSelectedCard(cardData);
@@ -145,32 +166,6 @@ function App() {
         console.log("Error. La solicitud ha fallado");
       });
   }
-
-  React.useEffect(() => {
-    const closeByEscape = (e) => {
-      if (e.key === "Escape") {
-        closeAllPopups();
-      }
-    };
-
-    document.addEventListener("keydown", closeByEscape);
-
-    return () => document.removeEventListener("keydown", closeByEscape);
-  }, []);
-
-  React.useEffect(() => {
-    const closeByClick = (e) => {
-      if (e.target.classList.contains("modal_active")) {
-        closeAllPopups();
-      }
-    };
-
-    document.addEventListener("click", closeByClick);
-
-    return () => document.removeEventListener("click", closeByClick);
-  }, []);
-
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
 
   return (
     <div className="page__content">
