@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
-import React from "react";
+import { React, useEffect, useState } from "react";
 import ImagePopup from "./ImagePopup";
 import api from "../utils/api";
 import { auth } from "../utils/auth";
@@ -17,21 +17,17 @@ import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
 
 function App() {
-  const [cards, setCards] = React.useState([]);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
+  const [cards, setCards] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
-  const [selectedCard, setSelectedCard] = React.useState({});
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
-
-  React.useEffect(() => {
+  useEffect(() => {
     api
       .getInitialCards()
       .then((data) => {
@@ -42,7 +38,7 @@ function App() {
       });
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api
       .getUserInfo()
       .then((res) => {
@@ -53,7 +49,7 @@ function App() {
       });
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const closeByEscape = (e) => {
       if (e.key === "Escape") {
         closeAllPopups();
@@ -65,7 +61,7 @@ function App() {
     return () => document.removeEventListener("keydown", closeByEscape);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const closeByClick = (e) => {
       if (e.target.classList.contains("modal_active")) {
         closeAllPopups();
